@@ -1,6 +1,8 @@
 package multithreading;
 
 import java.util.LinkedList;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 
 public class Producer extends Thread {
 	LinkedList<Integer> list;
@@ -20,24 +22,25 @@ public class Producer extends Thread {
 		while(true) {	 	
 			synchronized(list) {
 				while(list.size() == maxSize) {
+					System.out.println("Buffer max size reached");
 					try {
 						list.wait();
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 				
 				list.add(12);
-				System.out.println("From prod " + this._id + " " + list.size());
+				System.out.println("From producer id = " + this._id + " list.size() = " + list.size());
 				list.notifyAll();
 				
-//				try {
-//					sleep(100);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+				long nanos = ManagementFactory.getThreadMXBean().getThreadCpuTime(Thread.currentThread().getId());
+				System.out.println("Producer " + this._id + " time: " + nanos);
+				try {
+					sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

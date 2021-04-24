@@ -1,5 +1,6 @@
 package multithreading;
 
+import java.lang.management.ManagementFactory;
 import java.util.LinkedList;
 
 public class Consumer extends Thread {
@@ -8,7 +9,7 @@ public class Consumer extends Thread {
 	public static int id = 0;
 	public int _id;
 	
-	Consumer(LinkedList<Integer> list, int maxSize) {
+	Consumer(LinkedList<Integer> list) {
 		this.list = list;
 		this._id = Consumer.id++;
 	}
@@ -26,10 +27,17 @@ public class Consumer extends Thread {
                     }
 
                 }
-				
 				list.remove();
 				System.out.println("From consumer " + this._id + " " + list.size());
-                list.notifyAll();
+
+				long nanos = ManagementFactory.getThreadMXBean().getThreadCpuTime(Thread.currentThread().getId());
+				System.out.println("Consumer " + this._id + " time: " + nanos);
+				try {
+					sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				list.notifyAll();
 			}
 		}
 	}
