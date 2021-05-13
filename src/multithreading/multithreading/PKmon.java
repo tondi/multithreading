@@ -29,20 +29,5 @@ public class PKmon {
 		for(Consumer consumer : consumers) {
 			consumer.start();
 		}
-
-//
-//		try {
-//			p.join();
-//			c.join();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		while(true) {
-//			p.produce(list);
-//			c.consume(list);
-//		}
-
     }
 }
